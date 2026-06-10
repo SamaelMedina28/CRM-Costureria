@@ -40,5 +40,9 @@ const orderSchema = new Schema({
     enum: ["pending", "delievered", "cancelled"],
     default: "pending",
   },
-  
+}, {
+  timestamps: true,
+  collection: "orders"
 });
+
+export default model("Order", orderSchema);
