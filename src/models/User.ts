@@ -14,6 +14,14 @@ const userSchema = new Schema({
         type: String,
         required: true,
     },
+    clients: {
+        type: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Client"
+            }
+        ]
+    }
 }, {
     timestamps: true,
     collection: "users",
