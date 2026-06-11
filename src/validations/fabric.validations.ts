@@ -1,5 +1,4 @@
 import { body } from "express-validator";
-import Fabric from "../models/Fabric.js";
 
 export const createFabricRules = [
   body("name").notEmpty().withMessage("El nombre es requerido"),
