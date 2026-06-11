@@ -12,3 +12,12 @@ export const getAll = async (req: Request, res: Response) => {
   const fabrics = await Fabric.find({ user: req.user!.id }).select("-__v").sort({ createdAt: -1 });
   res.status(200).json(fabrics);
 }
+
+export const getOne = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const fabric = await Fabric.findById(id);
+  if (!fabric) {
+    return res.status(404).json({ message: "Tela no encontrada" });
+  }
+  res.status(200).json(fabric);
+}
