@@ -5,6 +5,7 @@ import { conectDB } from "./config/db.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import fabricRoutes from "./routes/fabric.routes.js";
+import measurementRoutes from "./routes/measurement.routes.js";
 config();
 conectDB();
 
@@ -18,6 +19,7 @@ app.use(cors({
 
 app.use("/", authRoutes);
 app.use("/fabrics", fabricRoutes);
+app.use("/measurements", measurementRoutes);
 
 app.listen(process.env.PORT || 5173, () => {
     console.log(`Server running on port ${process.env.PORT}`);
