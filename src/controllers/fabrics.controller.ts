@@ -21,3 +21,19 @@ export const getOne = async (req: Request, res: Response) => {
   }
   res.status(200).json(fabric);
 }
+
+export const destroy = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  
+  const fabric = await Fabric.findById(id);
+  if (!fabric) {
+    return res.status(404).json({ message: "Tela no encontrada" });
+  }
+
+  if (fabric.user?._id.toString() !== req.user?.id) {
+    return res.status(403).json({ message: "No tienes permiso para eliminar esta tela" });
+  }
+  
+  await fabric.deleteOne();
+  res.status(200).json({ message: "Tela eliminada correctamente" });
+}
