@@ -2,12 +2,15 @@ import { Schema, model } from "mongoose";
 
 const measurementSchema = new Schema(
   {
-    // Usuario al que pertenecen estas medidas
     user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true
+    },
+    clientName: {
       type: String,
       required: true,
     },
-
     // Atributos físicos básicos
     height: { type: Number, required: false }, // Altura (cm)
 
