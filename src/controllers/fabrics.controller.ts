@@ -22,6 +22,32 @@ export const getOne = async (req: Request, res: Response) => {
   res.status(200).json(fabric);
 }
 
+export const update = async (req: Request, res: Response) => {
+  const {id} = req.params;
+  
+  const fabric = await Fabric.findById(id);
+
+  if(!fabric){
+    return res.status(404).json({message: "Tela no encontrada"});
+  }
+
+  if (fabric.user?._id.toString() !== req.user?.id) {
+    return res.status(403).json({ message: "No tienes permiso para actualizar esta tela" });
+  }
+
+  const { name, price, stock, color, type } = req.body;
+
+  fabric.name = name;
+  fabric.price = price;
+  fabric.stock = stock;
+  fabric.color = color;
+  fabric.type = type;
+
+  await fabric.save();
+
+  res.status(200).json({ message: "Tela actualizada correctamente", fabric });
+}
+
 export const destroy = async (req: Request, res: Response) => {
   const { id } = req.params;
   
