@@ -1,6 +1,14 @@
 import type { Request, Response } from "express";
 import Measurement from "../models/Measurement.js";
 
+export const getAll = async (req: Request, res: Response) => {
+  const userId = req.user!.id;
+
+  const measurements = await Measurement.find({user: userId});
+
+  res.status(200).json(measurements);
+}
+
 export const create = async (req: Request, res: Response) => {
   const {clientName, height, chest, waist, hips, neck, shoulderWidth, sleeveLength, backLength, armhole, wrist, thigh, calf, ankle, otherNotes} = req.body;
 
