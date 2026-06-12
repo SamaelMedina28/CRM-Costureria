@@ -1,7 +1,7 @@
 import express from "express";
 import { createFabricRules, editFabricRules } from "../validations/fabric.validations.js";
 import { validate } from "../middlewares/validate.js";
-import { create, getAll, getOne, destroy, update } from "../controllers/fabrics.controller.js";
+import { create, getAll, getOne, destroy, update } from "../controllers/fabric.controller.js";
 const router = express.Router();
 
 router.get("/", getAll);
