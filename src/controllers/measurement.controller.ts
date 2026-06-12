@@ -19,6 +19,41 @@ export const create = async (req: Request, res: Response) => {
   res.status(201).json({message: "Medidas creadas correctamente", measurement});
 }
 
+export const update = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const measurement = await Measurement.findById(id)
+  
+  if (!measurement) {
+    return res.status(404).json({ message: "Medida no encontrada" });
+  }
+  
+  if (measurement.user?._id.toString() !== req.user!.id) {
+    return res.status(403).json({ message: "No tienes permiso para ver esta medida" });
+  }
+
+  const {clientName, height, chest, waist, hips, neck, shoulderWidth, sleeveLength, backLength, armhole, wrist, thigh, calf, ankle, otherNotes} = req.body;
+
+  measurement.clientName = clientName;
+  measurement.height = height;
+  measurement.chest = chest;
+  measurement.waist = waist;
+  measurement.hips = hips;
+  measurement.neck = neck;
+  measurement.shoulderWidth = shoulderWidth;
+  measurement.sleeveLength = sleeveLength;
+  measurement.backLength = backLength;
+  measurement.armhole = armhole;
+  measurement.wrist = wrist;
+  measurement.thigh = thigh;
+  measurement.calf = calf;
+  measurement.ankle = ankle;
+  measurement.otherNotes = otherNotes;
+
+  await measurement.save();
+
+  res.status(200).json({message: "Medidas actualizadas correctamente", measurement});
+}
+
 export const getOne = async (req: Request, res: Response) => {
   const { id } = req.params;
   const measurement = await Measurement.findById(id)
