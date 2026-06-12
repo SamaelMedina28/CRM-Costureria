@@ -18,3 +18,18 @@ export const create = async (req: Request, res: Response) => {
 
   res.status(201).json({message: "Medidas creadas correctamente", measurement});
 }
+
+export const getOne = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const measurement = await Measurement.findById(id)
+  
+  if (!measurement) {
+    return res.status(404).json({ message: "Medida no encontrada" });
+  }
+  
+  if (measurement.user?._id.toString() !== req.user!.id) {
+    return res.status(403).json({ message: "No tienes permiso para ver esta medida" });
+  }
+
+  res.status(200).json({measurement});
+}
