@@ -9,6 +9,14 @@ export const getAll = async (req: Request, res: Response) => {
   res.status(200).json({ orders });
 }
 
+export const getById = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const order = await Order.findById(id)
+    .populate("client", "name")
+    .populate("fabricsIHave.fabric", "name price")
+  res.status(200).json({ order });
+}
+
 export const create = async (req: Request, res: Response) => {
 
     const { client, fabricsIHave, fabricsINeed, status } = req.body;
