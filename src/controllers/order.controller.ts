@@ -14,6 +14,12 @@ export const getById = async (req: Request, res: Response) => {
   const order = await Order.findById(id)
     .populate("client", "name")
     .populate("fabricsIHave.fabric", "name price")
+  if(!order){
+    return res.status(404).json({ message: "Orden no encontrada" });
+  }
+  if(order.user._id.toString() !== req.user!.id){
+    return res.status(401).json({ message: "No tienes permiso para ver esta orden" });
+  }
   res.status(200).json({ order });
 }
 
@@ -39,4 +45,21 @@ export const update = async (req: Request, res: Response) => {
     fabricsINeed,
   }, { new: true });
   res.status(200).json({ order, message: "Orden actualizada correctamente" });
+}
+
+export const destroy = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const order = await Order.findById(id).populate("user")
+
+  if (!order) {
+    return res.status(404).json({ message: "Orden no encontrada" });
+  }
+
+  if (order.user._id.toString() !== req.user!.id) {
+    return res.status(401).json({ message: "No tienes permiso para eliminar esta orden" });
+  }
+
+  await order.deleteOne();
+  res.status(200).json({ message: "Orden eliminada correctamente" });
 }
