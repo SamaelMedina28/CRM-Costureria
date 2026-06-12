@@ -33,3 +33,19 @@ export const getOne = async (req: Request, res: Response) => {
 
   res.status(200).json({measurement});
 }
+
+export const destroy = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const measurement = await Measurement.findById(id)
+
+  if (!measurement) {
+    return res.status(404).json({ message: "Medida no encontrada" });
+  }
+
+  if (measurement.user?._id.toString() !== req.user!.id) {
+    return res.status(403).json({ message: "No tienes permiso para eliminar esta medida" });
+  }
+
+  await measurement.deleteOne();
+  res.status(200).json({ message: "Medida eliminada correctamente" });
+}
