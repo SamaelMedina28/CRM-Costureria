@@ -63,3 +63,71 @@ export const createOrderValidations = [
     .isIn(["pending", "delievered", "cancelled"])
     .withMessage("El estado es invalido"),
 ];
+
+export const updateOrderValidations = [
+  body("client")
+    .optional()
+    .notEmpty()
+    .withMessage("El cliente es requerido"),
+  body("fabricsIHave")
+    .optional()
+    .notEmpty()
+    .withMessage("Las telas que tienes son requeridas")
+    .isArray()
+    .withMessage("Las telas que tienes deben ser un array")
+    .custom((value) => {
+      if (value.length === 0) {
+        throw new Error("Debe haber al menos una tela");
+      }
+      return true;
+    }),
+  body("fabricsIHave.*.fabric")
+    .optional()
+    .notEmpty()
+    .withMessage("La tela es requerida")
+    .isMongoId()
+    .withMessage("La tela debe ser un id valido"),
+  body("fabricsIHave.*.quantity")
+    .optional()
+    .notEmpty()
+    .withMessage("La cantidad es requerida")
+    .isInt({ min: 1 })
+    .withMessage("La cantidad debe ser un numero mayor a 0")
+    .custom((value, { req }) => {
+      const fabricInOrder = req.body.fabricsIHave.find((fabric: any) => fabric.fabric === value);
+      if (fabricInOrder && value > fabricInOrder.quantity) {
+        throw new Error("La cantidad no puede ser mayor a la cantidad de la tela en stock");
+      }
+      return true;
+    }),
+  body("fabricsINeed")
+    .optional()
+    .notEmpty()
+    .withMessage("Las telas que necesitas son requeridas")
+    .isArray()
+    .withMessage("Las telas que necesitas deben ser un array")
+    .custom((value) => {
+      if (value.length === 0) {
+        throw new Error("Debe haber al menos una tela");
+      }
+      return true;
+    }),
+  body("fabricsINeed.*.name")
+    .optional()
+    .notEmpty()
+    .withMessage("El nombre es requerido")
+    .isString()
+    .withMessage("El nombre debe ser un string"),
+  body("fabricsINeed.*.color")
+    .optional()
+    .notEmpty()
+    .withMessage("El color es requerido")
+    .isString()
+    .withMessage("El color debe ser un string"),
+  body("fabricsINeed.*.quantity")
+    .optional()
+    .notEmpty()
+    .withMessage("La cantidad es requerida")
+    .isInt({ min: 1 })
+    .withMessage("La cantidad debe ser un numero mayor a 0"),
+];

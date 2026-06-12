@@ -18,7 +18,6 @@ export const getById = async (req: Request, res: Response) => {
 }
 
 export const create = async (req: Request, res: Response) => {
-
     const { client, fabricsIHave, fabricsINeed, status } = req.body;
     const order = new Order({
       user: req.user!.id,
@@ -29,5 +28,15 @@ export const create = async (req: Request, res: Response) => {
     });
     await order.save();
     res.status(201).json({ order, message: "Orden creada correctamente" });
+}
 
+export const update = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { client, fabricsIHave, fabricsINeed } = req.body;
+  const order = await Order.findByIdAndUpdate(id, {
+    client,
+    fabricsIHave,
+    fabricsINeed,
+  }, { new: true });
+  res.status(200).json({ order, message: "Orden actualizada correctamente" });
 }
