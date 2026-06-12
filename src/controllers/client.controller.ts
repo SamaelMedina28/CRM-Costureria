@@ -28,3 +28,27 @@ export const create = async (req: Request, res: Response) => {
   });
   return res.status(201).json({ message: "Cliente creado exitosamente", client });
 };
+
+export const update = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { name, phone, reference, rating } = req.body;
+  const client = await Client.findByIdAndUpdate(id, {
+    name,
+    phone,
+    reference,
+    rating,
+  });
+  if (!client) {
+    return res.status(404).json({ message: "Cliente no encontrado" });
+  }
+  return res.status(200).json({ message: "Cliente actualizado exitosamente", client });
+};
+
+export const destroy = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const client = await Client.findByIdAndDelete(id);
+  if (!client) {
+    return res.status(404).json({ message: "Cliente no encontrado" });
+  }
+  return res.status(200).json({ message: "Cliente eliminado exitosamente", client });
+};
