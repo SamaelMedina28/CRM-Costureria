@@ -25,12 +25,15 @@ export const getById = async (req: Request, res: Response) => {
 }
 
 export const create = async (req: Request, res: Response) => {
-    const { client, fabricsIHave, fabricsINeed } = req.body;
+    const { client, fabricsIHave, fabricsINeed, title, description, deliveryDate } = req.body;
     const order = new Order({
       user: req.user!.id,
       client,
       fabricsIHave,
       fabricsINeed,
+      title,
+      description,
+      deliveryDate,
     });
     await order.save();
     fabricsIHave.forEach(async (fabric: any) => {
@@ -41,11 +44,14 @@ export const create = async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
   const { id } = req.params;
-  const { client, fabricsIHave, fabricsINeed } = req.body;
+  const { client, fabricsIHave, fabricsINeed, title, description, deliveryDate } = req.body;
   const order = await Order.findByIdAndUpdate(id, {
     client,
     fabricsIHave,
     fabricsINeed,
+    title,
+    description,
+    deliveryDate,
   }, { new: true });
   res.status(200).json({ order, message: "Orden actualizada correctamente" });
 }
