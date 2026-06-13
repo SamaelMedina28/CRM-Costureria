@@ -25,15 +25,17 @@ export const getById = async (req: Request, res: Response) => {
 }
 
 export const create = async (req: Request, res: Response) => {
-    const { client, fabricsIHave, fabricsINeed, status } = req.body;
+    const { client, fabricsIHave, fabricsINeed } = req.body;
     const order = new Order({
       user: req.user!.id,
       client,
       fabricsIHave,
       fabricsINeed,
-      status,
     });
     await order.save();
+    fabricsIHave.forEach(async (fabric: any) => {
+      await Fabric.updateOne({ _id: fabric.fabric }, { $inc: { quantity: -fabric.quantity } });
+    });
     res.status(201).json({ order, message: "Orden creada correctamente" });
 }
 
