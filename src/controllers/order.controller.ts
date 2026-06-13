@@ -87,5 +87,5 @@ export const changeStatus = async (req: Request, res: Response) => {
   }
   order.status = status;
   await order.save();
-  res.status(200).json({ order, message: "Orden actualizada correctamente" });
+  res.status(200).json({message: "Orden actualizada correctamente",  order });
 }
