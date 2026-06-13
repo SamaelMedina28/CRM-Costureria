@@ -1,4 +1,5 @@
 import { body } from "express-validator";
+import Order from "../models/Order.js";
 // Verificar que en fabricsIHave la cantidad sea menor o igual a la cantidad que hay en la tela
 export const createOrderValidations = [
   body("client")
@@ -130,4 +131,12 @@ export const updateOrderValidations = [
     .withMessage("La cantidad es requerida")
     .isInt({ min: 1 })
     .withMessage("La cantidad debe ser un numero mayor a 0"),
+];
+
+export const changeStatusOrderValidations = [
+  body("status")
+    .notEmpty()
+    .withMessage("El estado es requerido")
+    .isIn(["delievered", "cancelled"])
+    .withMessage("El estado es invalido")
 ];

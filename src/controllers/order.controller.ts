@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import Order from "../models/Order.js";
+import Fabric from "../models/Fabric.js";
 
 export const getAll = async (req: Request, res: Response) => {
   const { id } = req.user!;
@@ -62,4 +63,27 @@ export const destroy = async (req: Request, res: Response) => {
 
   await order.deleteOne();
   res.status(200).json({ message: "Orden eliminada correctamente" });
+}
+
+export const changeStatus = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { status } = req.body;
+  const order = await Order.findById(id).populate("user");
+  if(!order){
+    return res.status(404).json({ message: "Orden no encontrada" });
+  }
+  if(order.user._id.toString() !== req.user!.id){
+    return res.status(401).json({ message: "No tienes permiso para cambiar el estado de esta orden" });
+  }
+  if(order.status !== "pending"){
+    return res.status(400).json({ message: "No se puede cambiar el estado de una orden que ya fue modificada" });
+  }
+  if(status === "delievered"){
+    order.fabricsIHave.forEach(async (fabric) => {
+      await Fabric.findByIdAndUpdate(fabric.fabric, { $inc: { quantity: -fabric.quantity } });
+    });
+  }
+  order.status = status;
+  await order.save();
+  res.status(200).json({ order, message: "Orden actualizada correctamente" });
 }
