@@ -80,9 +80,9 @@ export const changeStatus = async (req: Request, res: Response) => {
   if(order.status !== "pending"){
     return res.status(400).json({ message: "No se puede cambiar el estado de una orden que ya fue modificada" });
   }
-  if(status === "delievered"){
-    order.fabricsIHave.forEach(async (fabric) => {
-      await Fabric.findByIdAndUpdate(fabric.fabric, { $inc: { quantity: -fabric.quantity } });
+  if(status === "cancelled"){
+    order.fabricsIHave.forEach(async (fabric: any) => {
+      await Fabric.updateOne({ _id: fabric.fabric }, { $inc: { quantity: fabric.quantity } });
     });
   }
   order.status = status;
