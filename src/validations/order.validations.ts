@@ -63,6 +63,21 @@ export const createOrderValidations = [
     .optional()
     .isIn(["pending", "delievered", "cancelled"])
     .withMessage("El estado es invalido"),
+  body("title")
+    .notEmpty()
+    .withMessage("El titulo es requerido")
+    .isString()
+    .withMessage("El titulo debe ser un string"),
+  body("description")
+    .notEmpty()
+    .withMessage("La descripcion es requerida")
+    .isString()
+    .withMessage("La descripcion debe ser un string"),
+  body("deliveryDate")
+    .notEmpty()
+    .withMessage("La fecha de entrega es requerida")
+    .isString()
+    .withMessage("La fecha de entrega debe ser un string"),
 ];
 
 export const updateOrderValidations = [
@@ -131,6 +146,23 @@ export const updateOrderValidations = [
     .withMessage("La cantidad es requerida")
     .isInt({ min: 1 })
     .withMessage("La cantidad debe ser un numero mayor a 0"),
+  body("title")
+    .optional()
+    .notEmpty()
+    .withMessage("El titulo es requerido")
+    .isString()
+    .withMessage("El titulo debe ser un string"),
+  body("description")
+    .optional()
+    .notEmpty()
+    .withMessage("La descripcion es requerida")
+    .isString()
+    .withMessage("La descripcion debe ser un string"),
+  body("deliveryDate")
+    .notEmpty()
+    .withMessage("La fecha de entrega es requerida")
+    .isString()
+    .withMessage("La fecha de entrega debe ser un string"),
 ];
 
 export const changeStatusOrderValidations = [
