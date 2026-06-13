@@ -11,13 +11,21 @@ const orderSchema = new Schema({
     ref: "Client",
     required: true,
   },
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true
+  },
   fabricsIHave: [
     {
       fabric: {
         type: Schema.Types.ObjectId,
         ref: "Fabric"
       },
-      quantity: { // TODO: cuando se complete como completado el pedido se tienen que restar la cantidad de tela que se uso en el stock
+      quantity: {
         type: Number,
         required: true,
         min: 0
@@ -44,6 +52,10 @@ const orderSchema = new Schema({
     type: String,
     enum: ["pending", "delievered", "cancelled"],
     default: "pending",
+  },
+  deliveryDate: {
+    type: String,
+    required: true,
   },
 }, {
   timestamps: true,
