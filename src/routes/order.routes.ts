@@ -106,6 +106,9 @@ router.get("/:id", getById)
  *             $ref: '#/components/schemas/CrearPedidoInput'
  *           example:
  *             client: "665f1a2b3c4d5e6f7a8b9c0e"
+ *             description: "Vestido de novia con encaje y tul"
+ *             title: "Vestido de novia"
+ *             status: "pending"
  *             fabricsIHave:
  *               - fabric: "665f1a2b3c4d5e6f7a8b9c0f"
  *                 quantity: 3
